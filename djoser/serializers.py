@@ -26,8 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
         if settings.SEND_ACTIVATION_EMAIL and email_field in validated_data:
             instance_email = get_user_email(instance)
             if instance_email != validated_data[email_field]:
-                instance.is_active = False
-                instance.save(update_fields=["is_active"])
+                instance.email_verified = False
+                instance.save(update_fields=["email_verified"])
         return super().update(instance, validated_data)
 
 
@@ -71,9 +71,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def perform_create(self, validated_data):
         with transaction.atomic():
             user = User.objects.create_user(**validated_data)
-            if settings.SEND_ACTIVATION_EMAIL:
-                user.is_active = False
-                user.save(update_fields=["is_active"])
         return user
 
 
