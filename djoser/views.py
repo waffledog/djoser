@@ -181,7 +181,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.user
-        user.is_active = True
+        user.email_verified = True
         user.save()
 
         signals.user_activated.send(
